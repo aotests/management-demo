@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gerenciamento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Painel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="active">Visão Geral</a></li>
+                    <li><a href="#">Usuários</a></li>
+                    <li><a href="#">Configurações</a></li>
+                    <li><a href="#">Relatórios</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Visão Geral do Sistema</h1>
+                <div class="user-profile">
+                    <span id="user-greeting"></span>
+                    <button id="logout-button">Sair</button>
+                </div>
+            </header>
+            <section class="content-area">
+                <div class="table-container">
+                    <h2>Registros de Atividade</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuário</th>
+                                <th>Ação</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Gerenciar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Alice</td>
+                                <td>Login</td>
+                                <td>2024-07-26 10:00</td>
+                                <td>Sucesso</td>
+                                <td><button class="manage-btn" disabled>Editar</button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Bob</td>
+                                <td>Update Profile</td>
+                                <td>2024-07-26 10:15</td>
+                                <td>Sucesso</td>
+                                <td><button class="manage-btn" disabled>Editar</button></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Charlie</td>
+                                <td>Create Report</td>
+                                <td>2024-07-26 10:30</td>
+                                <td>Pendente</td>
+                                <td><button class="manage-btn" disabled>Editar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isAuthenticated') !== 'true') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const userData = JSON.parse(sessionStorage.getItem('userData'));
+            if (userData) {
+                document.getElementById('user-greeting').textContent = `Olá, ${userData.name}`;
+                
+                if (userData.access_level === 'write') {
+                    const manageButtons = document.querySelectorAll('.manage-btn');
+                    manageButtons.forEach(button => {
+                        button.disabled = false;
+                    });
+                }
+            }
+
+            document.getElementById('logout-button').addEventListener('click', () => {
+                sessionStorage.removeItem('isAuthenticated');
+                sessionStorage.removeItem('userData');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[
+    {
+        "name": "rogerin",
+        "email": "rogerin@gemeio.com",
+        "password": "$2b$12$rlK1R8NUOf/H53TB6amjxen7rLDOGO8NVKnembG3HR93UP2/NW9JC",
+        "access_level": "read",
+        "is_active": true
+    },
+    {
+        "name": "rogerin",
+        "email": "1@2.com.br",
+        "password": "$2b$12$LJUo6G/m3kibD/16D0s49eBpbHBIytCbmKvLEkv6E8IoLmmq/nwJi",
+        "access_level": "read",
+        "is_active": true
+    },
+    {
+        "name": "Escrevedor aaaa",
+        "email": "writer@algumacoisa.com",
+        "password": "$2b$12$s0YniWGyqxgClnnpNrPp9eMmEZI30IxZPr0.auZ44dXJmZC2Q1ooi",
+        "access_level": "write",
+        "is_active": true
+    }
+]
