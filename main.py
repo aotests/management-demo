@@ -36,6 +36,9 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+class UpdateAccessLevelRequest(BaseModel):
+    access_level: Literal["read", "write"]
+
 # Database file
 DB_FILE = "users.json"
 
@@ -153,6 +156,23 @@ def reactivate_user(email: EmailStr):
         if u["email"] == email:
             user_found = True
             u["is_active"] = True
+            write_db(users)
+            return u
+
+    if not user_found:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
+
+@app.put("/users/{email}/access-level", response_model=UserResponse)
+def update_access_level(email: EmailStr, request: UpdateAccessLevelRequest):
+    """
+    Updates a user's access level.
+    """
+    users = read_db()
+    user_found = False
+    for u in users:
+        if u["email"] == email:
+            user_found = True
+            u["access_level"] = request.access_level
             write_db(users)
             return u
 
