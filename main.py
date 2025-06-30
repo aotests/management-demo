@@ -1,11 +1,20 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 import bcrypt
 import json
+import os
 from typing import List, Literal
 
 app = FastAPI()
+
+# API Key Authentication
+API_KEY = os.environ.get("API_KEY")
+
+async def get_api_key(x_api_key: str = Header(None)):
+    if not API_KEY or x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API Key")
+    return x_api_key
 
 # CORS Middleware Configuration
 origins = ["*"]  # Allow all origins
@@ -63,7 +72,7 @@ def get_user_by_email(email: EmailStr):
 
 # Endpoints
 @app.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def create_user(user: User):
+def create_user(user: User, api_key: str = Depends(get_api_key)):
     """
     Creates a new user.
     """
@@ -82,7 +91,7 @@ def create_user(user: User):
     return user
 
 @app.get("/users", response_model=List[UserResponse])
-def get_users():
+def get_users(api_key: str = Depends(get_api_key)):
     """
     Returns a list of all users.
     """
@@ -111,7 +120,7 @@ def login(request: LoginRequest):
     }
 
 @app.post("/users/{email}/reset-password", response_model=UserResponse)
-def reset_password(email: EmailStr):
+def reset_password(email: EmailStr, api_key: str = Depends(get_api_key)):
     """
     Resets a user's password to "teste123".
     """
@@ -129,7 +138,7 @@ def reset_password(email: EmailStr):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
 
 @app.delete("/users/{email}", response_model=UserResponse)
-def deactivate_user(email: EmailStr):
+def deactivate_user(email: EmailStr, api_key: str = Depends(get_api_key)):
     """
     Deactivates a user.
     """
@@ -146,7 +155,7 @@ def deactivate_user(email: EmailStr):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
 
 @app.post("/users/{email}/reactivate", response_model=UserResponse)
-def reactivate_user(email: EmailStr):
+def reactivate_user(email: EmailStr, api_key: str = Depends(get_api_key)):
     """
     Reactivates a user.
     """
@@ -163,7 +172,7 @@ def reactivate_user(email: EmailStr):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
 
 @app.put("/users/{email}/access-level", response_model=UserResponse)
-def update_access_level(email: EmailStr, request: UpdateAccessLevelRequest):
+def update_access_level(email: EmailStr, request: UpdateAccessLevelRequest, api_key: str = Depends(get_api_key)):
     """
     Updates a user's access level.
     """
