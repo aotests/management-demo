@@ -12,5 +12,12 @@
         "password": "$2b$12$x1GOuS4F5ej5s7.P9AOeXuDDvdKSJhJDc9gngoR2mDIYSsw3ckP7K",
         "access_level": "write",
         "is_active": true
+    },
+    {
+        "name": "Inativo",
+        "email": "unactive@123.zz",
+        "password": "$2b$12$x1GOuS4F5ej5s7.P9AOeXuDDvdKSJhJDc9gngoR2mDIYSsw3ckP7K",
+        "access_level": "write",
+        "is_active": false
     }
 ]
